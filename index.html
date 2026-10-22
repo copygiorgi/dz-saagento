@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rental Agency Dashboard</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#12263a">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#eaf0f4;--panel:#fff;--ink:#12263a;--mute:#5d7285;--line:#d9e3ea;--brand:#0e7c86;--brand-soft:#d6eef0;--warn:#a96a0c;--warn-soft:#fbeed3;--bad:#c93f55;--bad-soft:#f9dde2;--ok:#2f8f5b;--ok-soft:#dcf0e5;--side:#12263a;--sideink:#c5d3de;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d1822;--panel:#15232f;--ink:#e6eef4;--mute:#8da3b4;--line:#243746;--brand:#3cc0cb;--brand-soft:#133a40;--warn:#e8aa4a;--warn-soft:#3a2d12;--bad:#ee7088;--bad-soft:#40202a;--ok:#5ccb8e;--ok-soft:#173826;--side:#09121a;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d1822;--panel:#15232f;--ink:#e6eef4;--mute:#8da3b4;--line:#243746;--brand:#3cc0cb;--brand-soft:#133a40;--warn:#e8aa4a;--warn-soft:#3a2d12;--bad:#ee7088;--bad-soft:#40202a;--ok:#5ccb8e;--ok-soft:#173826;--side:#09121a;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font:14px/1.45 "Plus Jakarta Sans",system-ui,sans-serif}
+.app{display:grid;grid-template-columns:210px 1fr;min-height:100%}
+aside{background:var(--side);color:var(--sideink);padding:20px 12px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:4px}
+.logo{font-weight:800;font-size:19px;color:#fff;padding:4px 10px 18px;letter-spacing:-.3px;overflow-wrap:anywhere}
+nav button{all:unset;box-sizing:border-box;display:flex;align-items:center;width:100%;padding:9px 12px;border-radius:8px;cursor:pointer;font-weight:600;color:var(--sideink)}
+nav button:hover{background:rgba(255,255,255,.07)}
+nav button.on{background:#0e7c86;color:#fff}
+nav button:focus-visible,.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #3cc0cb;outline-offset:2px}
+nav b{margin-left:auto;font-size:11px;background:rgba(255,255,255,.15);border-radius:10px;padding:1px 7px}
+.theme{margin-top:auto}
+main{padding:24px 28px 40px;min-width:0}
+header.top{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:20px}
+h1{font-size:24px;margin:0;letter-spacing:-.4px}
+.sub{color:var(--mute);margin-top:2px}
+.sp{flex:1}
+input,select,textarea{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 11px;font:inherit;width:100%}
+input[type=checkbox]{width:18px;height:18px;accent-color:var(--brand)}
+.btn{background:var(--brand);color:#fff;border:0;border-radius:8px;padding:8px 13px;font:inherit;font-weight:600;cursor:pointer;width:auto}
+:root[data-theme="dark"] .btn:not(.ghost):not(.danger){color:#07202a}
+.btn.ghost{background:var(--brand-soft);color:var(--brand)}
+.btn.danger{background:var(--bad-soft);color:var(--bad)}
+.btn.sm{padding:4px 10px;font-size:12px}
+.grid{display:grid;gap:16px}
+.kpis{grid-template-columns:repeat(auto-fit,minmax(180px,1fr));margin-bottom:16px}
+.cols{grid-template-columns:repeat(auto-fit,minmax(310px,1fr));margin-bottom:16px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;min-width:0}
+.card h3{margin:0 0 12px;font-size:15px}
+.kpi .v{font-size:28px;font-weight:800;letter-spacing:-.8px}
+.kpi .l{color:var(--mute);font-weight:600}
+.kpi .d{font-size:12px;font-weight:700;margin-top:4px;color:var(--mute)}
+.up{color:var(--ok)!important}.dn{color:var(--bad)!important}
+.tag{display:inline-block;padding:2px 9px;border-radius:20px;font-size:12px;font-weight:700;white-space:nowrap}
+.t-ok{background:var(--ok-soft);color:var(--ok)}.t-warn{background:var(--warn-soft);color:var(--warn)}.t-bad{background:var(--bad-soft);color:var(--bad)}.t-mute{background:var(--brand-soft);color:var(--brand)}
+.scroll{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:600px}
+th{text-align:left;color:var(--mute);font-weight:600;font-size:12px;padding:8px 10px;border-bottom:1px solid var(--line)}
+td{padding:10px;border-bottom:1px solid var(--line);vertical-align:middle}
+tr:last-child td{border-bottom:0}
+.list{display:flex;flex-direction:column}
+.row{display:flex;gap:10px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)}
+.row:last-child{border-bottom:0}
+.m{color:var(--mute);font-size:12px}
+.m a{color:inherit}
+.g{flex:1;min-width:0}
+.av{width:30px;height:30px;border-radius:50%;background:var(--brand-soft);color:var(--brand);display:grid;place-items:center;font-weight:800;font-size:12px;flex:none}
+.kan{display:grid;grid-template-columns:repeat(6,minmax(200px,1fr));gap:12px;overflow-x:auto;padding-bottom:6px}
+.kcol{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px}
+.kcol h4{margin:0 0 8px;font-size:13px;display:flex;justify-content:space-between}
+.lead{background:var(--bg);border-radius:8px;padding:10px;margin-bottom:8px}
+.lead .m{margin:2px 0 8px}
+.lead .btn{margin:0 4px 4px 0}
+.bar{height:8px;background:var(--line);border-radius:5px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--brand)}
+.mb{display:flex;align-items:flex-end;gap:10px;height:170px}
+.mb div{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;height:100%;gap:4px}
+.mb i{display:block;width:100%;max-width:44px;background:var(--brand);border-radius:6px 6px 0 0;min-height:3px}
+.empty{color:var(--mute);padding:6px 0}
+.toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--ink);color:var(--panel);padding:9px 16px;border-radius:8px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s;z-index:30;max-width:90vw}
+.toast.show{opacity:1}
+#modal{display:none;position:fixed;inset:0;background:rgba(8,18,26,.6);z-index:20;overflow:auto;padding:20px}
+#modal.on{display:block}
+.dlg{background:var(--panel);border-radius:14px;max-width:640px;margin:0 auto;padding:20px}
+.dlg h2{margin:0 0 14px;font-size:19px}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fg label{display:flex;flex-direction:column;gap:4px;min-width:0}
+.fg label span{font-size:12px;font-weight:600;color:var(--mute)}
+.fg .w{grid-column:1/-1}
+.fg .ck{flex-direction:row;align-items:center;gap:8px}
+.acts{display:flex;gap:8px;margin-top:16px}
+.auto{background:var(--brand-soft);border-radius:10px;padding:12px;margin-bottom:14px}
+.auto p{margin:0 0 8px;font-size:12px;color:var(--mute)}
+.set{display:grid;gap:12px;max-width:420px}
+.set label{display:flex;flex-direction:column;gap:4px}
+.tabs,.fab,.chips,.quick{display:none}
+.pc{margin-bottom:10px}
+@media (max-width:820px){
+.app{display:block}
+aside{display:none}
+main{padding:14px 14px calc(96px + env(safe-area-inset-bottom,0px))}
+h1{font-size:21px}
+.tabs{display:flex;position:fixed;left:0;right:0;bottom:0;background:var(--panel);border-top:1px solid var(--line);padding:6px 4px calc(6px + env(safe-area-inset-bottom,0px));z-index:10}
+.tabs button{all:unset;box-sizing:border-box;flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 0;font-size:10.5px;font-weight:700;color:var(--mute);cursor:pointer;min-height:48px}
+.tabs button.on{color:var(--brand)}
+.tabs button:focus-visible{outline:2px solid var(--brand);border-radius:8px}
+.fab{display:grid;place-items:center;position:fixed;right:16px;bottom:calc(82px + env(safe-area-inset-bottom,0px));width:56px;height:56px;border-radius:50%;background:var(--brand);color:#fff;font-size:30px;line-height:1;border:0;box-shadow:0 6px 18px rgba(0,0,0,.28);z-index:11;padding:0}
+:root[data-theme="dark"] .fab{color:#07202a}
+.toast{bottom:calc(150px + env(safe-area-inset-bottom,0px))}
+.kpis{grid-template-columns:1fr 1fr;gap:10px}
+.kpi .v{font-size:22px}
+.kpi .l{font-size:12px}
+.cols{grid-template-columns:1fr}
+.card{padding:14px}
+input,select,textarea{font-size:16px;padding:11px 12px}
+.btn{min-height:40px}
+.btn.sm{min-height:36px;padding:6px 12px;font-size:13px}
+.row{flex-wrap:wrap}
+#modal{padding:0}
+.dlg{border-radius:0;min-height:100%;max-width:none;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px))}
+.fg{grid-template-columns:1fr}
+.acts{position:sticky;bottom:0;background:var(--panel);padding:12px 0 0;margin-top:12px}
+.kan{grid-template-columns:1fr;overflow:visible}
+.chips{display:flex;gap:8px;overflow-x:auto;margin-bottom:12px;padding-bottom:4px}
+.chips button{all:unset;box-sizing:border-box;flex:none;padding:9px 15px;border-radius:22px;background:var(--panel);border:1px solid var(--line);font-weight:700;font-size:13px;cursor:pointer}
+.chips button.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside><div class="logo" id="logo"></div><nav id="nav"></nav><button class="btn ghost theme" id="theme">Switch theme</button></aside>
+<main id="main"></main>
+</div>
+<nav class="tabs" id="tabs" aria-label="Main sections"></nav>
+<div id="modal" role="dialog" aria-modal="true"></div>
+<div class="toast" id="toast" role="status"></div>
+<script>
+const pad=n=>String(n).padStart(2,"0"),fmt=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const NOW=new Date(),today=fmt(NOW),thisMonth=today.slice(0,7);
+const $=s=>document.querySelector(s);
+const mob=()=>matchMedia("(max-width:820px)").matches;
+const QUICK='<div class="quick"><button class="btn" data-add="props">+ Property</button><button class="btn" data-add="leads">+ Client</button><button class="btn" data-add="views">+ Viewing</button></div>';
+const E=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const uid=()=>Math.random().toString(36).slice(2,9);
+const ini=n=>(String(n||"?").split(" ").map(x=>x[0]).join("").slice(0,2)).toUpperCase();
+const STAGES=["New","Contacted","Viewing","Offer","Rented","Rejected"];
+const T={props:"property",leads:"client",views:"viewing"};
+const F={
+props:[["addr","Address","text"],["url","Listing link","url"],["area","Area","text"],["type","Type","select",["Apartment","House","Studio","Loft","Office"]],["beds","Bedrooms","number"],["rent","Monthly rent","number"],["size","Size (m\u00b2)","number"],["floor","Floor","text"],["furn","Furnished","select",["Yes","No","Partly"]],["st","Status","select",["Available","Rented","Rejected"]],["owner","Landlord","text"],["ownerPh","Landlord phone","tel"],["notes","Notes and building details","area"]],
+leads:[["n","Client name","text"],["ph","Phone","tel"],["em","Email","email"],["i","Looking for","text"],["p","Property","select","prop"],["stage","Stage","select",STAGES],["fee","Fee earned","number"],["closed","Closed on","date"],["notes","Notes","area"]],
+views:[["when","Date and time","datetime-local"],["p","Property","select","prop"],["who","Client","text"],["ph","Client phone","tel"],["done","Completed","check"],["notes","Notes","area"]]};
+const DEF={props:()=>({st:"Available",type:"Apartment"}),leads:()=>({stage:"New"}),views:()=>({})};
+
+const seed=()=>({settings:{name:"Your Agency",owner:"",cur:"$",months:1},
+props:[
+{id:"p1",addr:"12 Chavchavadze Ave",url:"",area:"Vake",type:"Apartment",beds:2,rent:1200,size:75,floor:"4",furn:"Yes",st:"Rented",owner:"Mr. Abashidze",ownerPh:"",notes:"Elevator, parking"},
+{id:"p2",addr:"4 Kostava St",url:"",area:"Vera",type:"Apartment",beds:1,rent:750,size:48,floor:"2",furn:"Partly",st:"Available",owner:"",ownerPh:"",notes:""},
+{id:"p3",addr:"27 Paliashvili St",url:"",area:"Vera",type:"Studio",beds:0,rent:520,size:30,floor:"1",furn:"No",st:"Available",owner:"",ownerPh:"",notes:""}],
+leads:[
+{id:"l1",n:"Giorgi Beridze",ph:"",em:"",i:"2-bed in Vake",p:"12 Chavchavadze Ave",stage:"Rented",fee:1200,closed:today,notes:""},
+{id:"l2",n:"Maria Lopez",ph:"",em:"",i:"1-bed in Vera",p:"4 Kostava St",stage:"Rejected",fee:"",closed:today,notes:"Found something cheaper"},
+{id:"l3",n:"Oleg Ivanov",ph:"",em:"",i:"Studio in Vera",p:"27 Paliashvili St",stage:"Viewing",fee:"",closed:"",notes:""}],
+views:[{id:"v1",when:today+"T15:00",p:"27 Paliashvili St",who:"Oleg Ivanov",ph:"",done:false,notes:""}]});
+function norm(s){s.settings=Object.assign({name:"Your Agency",owner:"",cur:"$",months:1},s.settings||{});["props","leads","views"].forEach(k=>s[k]=s[k]||[]);
+s.props.forEach(p=>{p.st={Occupied:"Rented",Vacant:"Available",Maintenance:"Available"}[p.st]||p.st||"Available"});
+s.leads.forEach(l=>{if(l.stage==="Signed")l.stage="Rented";if(!STAGES.includes(l.stage))l.stage="New"});return s}
+let S=norm(seed()),DB=null,view="Overview",q="",fst="All",M=null,cst="New";
+try{const l=localStorage.getItem("agency-crm");if(l)S=norm(JSON.parse(l))}catch(e){}
+
+let st_;function save(){clearTimeout(st_);st_=setTimeout(async()=>{const j=JSON.stringify(S);try{localStorage.setItem("agency-crm",j)}catch(e){}if(DB)try{await DB.doc("crm/state").set({json:j})}catch(e){}},300)}
+const money=n=>E(S.settings.cur)+Math.round(+n||0).toLocaleString("en-US");
+const toast=m=>{const t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("show"),2600)};
+const pct=(a,b)=>b?Math.round(a/b*100):0;
+const fdt=s=>s?new Date(s).toLocaleString("en-GB",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}):"No date";
+const fd=s=>s?new Date(s).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}):"";
+const av=n=>`<span class="av">${E(ini(n))}</span>`;
+const tel=p=>p?`<a href="tel:${E(p)}">${E(p)}</a>`:"";
+const link=u=>/^https?:/i.test(u||"")?`<a href="${E(u)}" target="_blank" rel="noopener noreferrer">Open listing \u2197</a> `:"";
+const stTag=s=>`<span class="tag ${s==="Rented"?"t-ok":s==="Available"?"t-mute":"t-bad"}">${E(s)}</span>`;
+const kpi=(l,v,d,c)=>`<div class="card kpi"><div class="l">${l}</div><div class="v">${v}</div><div class="d ${c||""}">${d}</div></div>`;
+const edit=(k,id)=>`<button class="btn sm ghost" data-edit="${k}:${id}">Edit</button>`;
+const none=t=>`<div class="empty">${t}</div>`;
+const prop=a=>S.props.find(p=>p.addr===a);
+const rented=()=>S.leads.filter(l=>l.stage==="Rented"),rejected=()=>S.leads.filter(l=>l.stage==="Rejected");
+const sum=a=>a.reduce((x,l)=>x+(+l.fee||0),0);
+
+function setStage(l,st){l.stage=st;const p=prop(l.p);
+if(st==="Rented"){if(l.fee===""||l.fee==null)l.fee=Math.round((+(p&&p.rent)||0)*S.settings.months);if(!l.closed)l.closed=today;if(p)p.st="Rented"}
+else if(st==="Rejected"&&!l.closed)l.closed=today}
+
+function overview(){
+const rt=rented(),rj=rejected(),done=rt.length+rj.length,rate=pct(rt.length,done);
+const mo=rt.filter(l=>(l.closed||"").startsWith(thisMonth));
+const ms=[];for(let i=5;i>=0;i--){const d=new Date(NOW.getFullYear(),NOW.getMonth()-i,1),k=`${d.getFullYear()}-${pad(d.getMonth()+1)}`;ms.push([d.toLocaleString("en-GB",{month:"short"}),sum(rt.filter(l=>(l.closed||"").startsWith(k)))])}
+const mx=Math.max(1,...ms.map(x=>x[1]));
+const open=STAGES.slice(0,4).map(s=>[s,S.leads.filter(l=>l.stage===s).length]);
+const vs=S.views.filter(v=>!v.done).sort((a,b)=>(a.when||"").localeCompare(b.when||"")),av_=S.props.filter(p=>p.st==="Available");
+const ring=`<svg viewBox="0 0 140 140" width="130" role="img" aria-label="${rate}% success rate"><circle cx="70" cy="70" r="52" fill="none" stroke="var(--line)" stroke-width="16"/><circle cx="70" cy="70" r="52" fill="none" stroke="var(--brand)" stroke-width="16" stroke-linecap="round" stroke-dasharray="${326.7*rate/100} 327" transform="rotate(-90 70 70)"/><text x="70" y="77" text-anchor="middle" style="font:800 26px 'Plus Jakarta Sans';fill:var(--ink)">${rate}%</text></svg>`;
+return `<div class="grid kpis">
+${kpi("Earned this month",money(sum(mo)),mo.length+" rentals closed","up")}
+${kpi("Total earned",money(sum(rt)),rt.length+" rentals all time","up")}
+${kpi("Rented",rt.length,"Deals won")}
+${kpi("Rejected",rj.length,"Deals lost",rj.length?"dn":"")}
+${kpi("Success rate",rate+"%","Of closed deals")}
+${kpi("Available listings",av_.length,"Waiting for a client")}</div>
+<div class="grid cols">
+<div class="card"><h3>Earnings, last 6 months</h3><div class="mb">${ms.map(([n,v])=>`<div><span class="m">${v?money(v):""}</span><i style="height:${v/mx*120}px"></i><span class="m">${n}</span></div>`).join("")}</div></div>
+<div class="card"><h3>Results</h3><div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap">${ring}<div class="list" style="flex:1;min-width:140px"><div class="row"><span class="tag t-ok">Rented</span><span class="sp"></span><b>${rt.length}</b></div><div class="row"><span class="tag t-bad">Rejected</span><span class="sp"></span><b>${rj.length}</b></div></div></div></div>
+<div class="card"><h3>Deals in progress</h3>${open.map(([s,n])=>`<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between"><span>${s}</span><b>${n}</b></div><div class="bar"><i style="width:${pct(n,S.leads.length)}%"></i></div></div>`).join("")}</div></div>
+<div class="grid cols">
+<div class="card"><h3>Upcoming viewings</h3><div class="list">${vs.slice(0,5).map(v=>`<div class="row">${av(v.who)}<div class="g"><b>${E(v.p)}</b><div class="m">${E(v.who)}</div></div><span class="tag t-mute">${fdt(v.when)}</span></div>`).join("")||none("No viewings booked.")}</div></div>
+<div class="card"><h3>Available listings</h3><div class="list">${av_.slice(0,6).map(p=>`<div class="row"><div class="g"><b>${E(p.addr)}</b><div class="m">${E(p.area)} ${link(p.url)}</div></div><b>${money(p.rent)}</b></div>`).join("")||none("No available listings. Add a property to get started.")}</div></div></div>`}
+
+function properties(){
+const rows=S.props.filter(p=>(fst==="All"||p.st===fst)&&[p.addr,p.area,p.owner].join(" ").toLowerCase().includes(q.toLowerCase()));
+if(mob())return `<div style="display:flex;gap:8px;margin-bottom:12px"><input id="q" placeholder="Search properties" value="${E(q)}"><select id="fs" style="width:auto">${["All","Available","Rented","Rejected"].map(s=>`<option ${s==fst?"selected":""}>${s}</option>`).join("")}</select></div>`+(rows.map(p=>`<div class="card pc"><div style="display:flex;gap:8px;align-items:flex-start"><div class="g"><b>${E(p.addr)}</b><div class="m">${E(p.area)} · ${E(p.type)}${p.beds?" · "+E(p.beds)+" bed":""}</div></div>${stTag(p.st)}</div><div class="m" style="margin:6px 0">${[p.size?p.size+" m²":"",p.floor?"floor "+p.floor:"",p.furn?"furnished: "+p.furn:""].filter(Boolean).map(E).join(" · ")}</div><div style="display:flex;justify-content:space-between;align-items:center;gap:8px"><span><b>${money(p.rent)}</b> / month<br><span class="m">Your fee ${money(p.rent*S.settings.months)}</span></span><span>${link(p.url)}${edit("props",p.id)}</span></div>${p.owner?`<div class="m" style="margin-top:6px">Landlord: ${E(p.owner)} ${tel(p.ownerPh)}</div>`:""}</div>`).join("")||none(S.props.length?"No properties match your search.":"No properties yet. Tap + to add the first one."));
+return `<div class="card"><div style="display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap"><input id="q" placeholder="Search address, area or landlord" value="${E(q)}" style="flex:1;min-width:200px"><select id="fs" style="width:auto">${["All","Available","Rented","Rejected"].map(s=>`<option ${s==fst?"selected":""}>${s}</option>`).join("")}</select></div>
+<div class="scroll"><table><tr><th>Property</th><th>Area</th><th>Details</th><th>Rent</th><th>Your fee</th><th>Status</th><th></th></tr>
+${rows.map(p=>`<tr><td><b>${E(p.addr)}</b><div class="m">${link(p.url)}${E(p.owner?"Landlord: "+p.owner:"")} ${tel(p.ownerPh)}</div></td><td>${E(p.area)}</td><td>${E(p.type)}${p.beds?" \u00b7 "+E(p.beds)+" bed":""}<div class="m">${[p.size?p.size+" m\u00b2":"",p.floor?"floor "+p.floor:"",p.furn?"furnished: "+p.furn:""].filter(Boolean).map(E).join(" \u00b7 ")}</div></td><td>${money(p.rent)}</td><td>${money(p.rent*S.settings.months)}</td><td>${stTag(p.st)}</td><td>${edit("props",p.id)}</td></tr>`).join("")||`<tr><td colspan="7">${S.props.length?"No properties match your search.":"No properties yet. Use Add property to create the first one."}</td></tr>`}</table></div></div>`}
+
+const CHIPS=()=>`<div class="chips">${STAGES.map(s=>`<button class="${s===cst?"on":""}" data-cst="${s}">${s} ${S.leads.filter(l=>l.stage===s).length}</button>`).join("")}</div>`;
+function clients(){
+return (mob()?CHIPS():"")+`<div class="kan">${STAGES.map((s,i)=>mob()&&s!==cst?"":`<div class="kcol"><h4>${s}<span class="tag ${s==="Rented"?"t-ok":s==="Rejected"?"t-bad":"t-mute"}">${S.leads.filter(l=>l.stage===s).length}</span></h4>
+${S.leads.filter(l=>l.stage===s).map(l=>`<div class="lead"><b>${E(l.n)}</b><div class="m">${E(l.p||l.i)}<br>${tel(l.ph)} ${E(l.em)}${s==="Rented"?`<br><b class="up">Fee ${money(l.fee)}</b>`:""}</div>${i>0&&i<4?`<button class="btn sm ghost" data-mv="${l.id}:${STAGES[i-1]}" aria-label="Move back">\u2039</button>`:""}${i<3?`<button class="btn sm" data-mv="${l.id}:${STAGES[i+1]}">${STAGES[i+1]} \u203a</button>`:""}${i<4?`<button class="btn sm" data-mv="${l.id}:Rented">\u2713 Rented</button><button class="btn sm danger" data-mv="${l.id}:Rejected">\u2715 Rejected</button>`:`<button class="btn sm ghost" data-mv="${l.id}:New">Reopen</button>`}${edit("leads",l.id)}</div>`).join("")}</div>`).join("")}</div>`}
+
+function viewings(){
+const vs=[...S.views].sort((a,b)=>(a.when||"").localeCompare(b.when||""));
+return `<div class="card"><h3>Viewings</h3><div class="list">${vs.map(v=>`<div class="row" style="${v.done?"opacity:.6":""}"><span class="tag t-mute">${fdt(v.when)}</span><div class="g"><b>${E(v.p)}</b><div class="m">${E(v.who)} ${tel(v.ph)}</div></div>${v.done?`<span class="tag t-ok">Done</span>`:`<button class="btn sm" data-done="views:${v.id}">Mark done</button>`}${edit("views",v.id)}</div>`).join("")||none("No viewings yet. Use Add viewing to book one.")}</div></div>`}
+
+function earnings(){if(!mob())return earningsD();
+const rt=rented().sort((a,b)=>(b.closed||"").localeCompare(a.closed||"")),rj=rejected();
+return `<div class="grid kpis">${kpi("Total earned",money(sum(rt)),rt.length+" rentals","up")}${kpi("This month",money(sum(rt.filter(l=>(l.closed||"").startsWith(thisMonth)))),"Month to date","up")}${kpi("Average fee",money(rt.length?sum(rt)/rt.length:0),"Per rental")}${kpi("Rejected deals",rj.length,pct(rj.length,rt.length+rj.length)+"% of closed deals",rj.length?"dn":"")}</div><h3 style="margin:4px 0 10px">Rentals closed</h3>`+(rt.map(l=>`<div class="card pc"><div style="display:flex;justify-content:space-between;gap:8px"><div class="g"><b>${E(l.n)}</b><div class="m">${E(l.p)}</div></div><b class="up">${money(l.fee)}</b></div><div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px"><span class="m">Closed ${fd(l.closed)}</span>${edit("leads",l.id)}</div></div>`).join("")||none("No rentals closed yet. Mark a client as Rented to record your fee."))}
+function earningsD(){
+const rt=rented().sort((a,b)=>(b.closed||"").localeCompare(a.closed||"")),rj=rejected();
+return `<div class="grid kpis">${kpi("Total earned",money(sum(rt)),rt.length+" rentals","up")}${kpi("This month",money(sum(rt.filter(l=>(l.closed||"").startsWith(thisMonth)))),"Month to date","up")}${kpi("Average fee",money(rt.length?sum(rt)/rt.length:0),"Per rental")}${kpi("Rejected deals",rj.length,pct(rj.length,rt.length+rj.length)+"% of closed deals",rj.length?"dn":"")}</div>
+<div class="card"><h3>Rentals closed</h3><div class="scroll"><table><tr><th>Client</th><th>Property</th><th>Monthly rent</th><th>Your fee</th><th>Closed</th><th></th></tr>
+${rt.map(l=>`<tr><td><b>${E(l.n)}</b></td><td>${E(l.p)}</td><td>${money(prop(l.p)?.rent)}</td><td><b class="up">${money(l.fee)}</b></td><td>${fd(l.closed)}</td><td>${edit("leads",l.id)}</td></tr>`).join("")||`<tr><td colspan="6">No rentals closed yet. Mark a client as Rented to record your fee.</td></tr>`}</table></div></div>`}
+
+function settings(){
+const s=S.settings;
+return `<div class="card"><h3>Agency settings</h3><div class="set">
+<label><span class="m">Agency name</span><input data-set="name" value="${E(s.name)}"></label>
+<label><span class="m">Your name</span><input data-set="owner" value="${E(s.owner)}"></label>
+<label><span class="m">Currency symbol</span><input data-set="cur" value="${E(s.cur)}" maxlength="4"></label>
+<label><span class="m">Your fee per rental (months of rent)</span><input data-set="months" type="number" step="any" value="${E(s.months)}"></label>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn" id="exp">Export backup</button><button class="btn ghost" id="imp">Import backup</button><input type="file" id="impf" accept=".json,application/json" hidden></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn danger" id="clear">Delete all data</button><button class="btn ghost" id="sample">Load sample data</button></div>
+<div class="m">Changes save automatically in this browser. Export a backup now and then so you never lose your clients. Delete all data empties every list so you can start with your own properties and clients.</div></div></div>`}
+
+const V={Overview:[overview,"Your earnings and results"],Properties:[properties,"Listings you rent out",["props","Add property"]],Clients:[clients,"Each client ends as Rented or Rejected",["leads","Add client"]],Viewings:[viewings,"Booked property visits",["views","Add viewing"]],Earnings:[earnings,"One month's rent per rental"],Settings:[settings,"Name, currency and fee"]};
+const badge=n=>n==="Viewings"?S.views.filter(v=>!v.done).length:0;
+function render(){
+$("#logo").textContent=S.settings.name||"Rental agency";document.title=S.settings.name||"Rental agency";
+$("#nav").innerHTML=Object.keys(V).map(n=>`<button class="${n==view?"on":""}" data-v="${n}">${n}${badge(n)?`<b>${badge(n)}</b>`:""}</button>`).join("");
+$("#tabs").innerHTML=[["Overview","📊"],["Properties","🏠"],["Clients","👥"],["Viewings","📅"],["Earnings","💰"],["Settings","⚙️"]].map(([n,i])=>`<button class="${n==view?"on":""}" data-v="${n}"><span style="font-size:20px;line-height:1">${i}</span>${n}</button>`).join("");
+const a=V[view][2],ov=view==="Overview";
+$("#main").innerHTML=`<header class="top"><div><h1>${ov&&S.settings.owner?"Welcome back, "+E(S.settings.owner.split(" ")[0]):view}</h1><div class="sub">${V[view][1]} \u00b7 ${NOW.toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long",year:"numeric"})}</div></div><span class="sp"></span>${!mob()&&a?`<button class="btn" data-add="${a[0]}">+ ${a[1]}</button>`:""}${!mob()&&ov?[["props","Property"],["leads","Client"],["views","Viewing"]].map(x=>`<button class="btn ghost" data-add="${x[0]}">+ ${x[1]}</button>`).join(""):""}</header>`+(mob()&&ov?QUICK:"")+V[view][0]()+(mob()&&a?`<button class="fab" data-add="${a[0]}" aria-label="${a[1]}">+</button>`:"");
+}
+
+const AUTO='<div class="auto"><p>Paste the text of the listing page (copy it from myhome.ge or ss.ge, Georgian is fine), then press Autofill. The rent, area, size and other details are filled in for you to check.</p><textarea id="paste" rows="3" placeholder="Paste listing text here"></textarea><button type="button" class="btn sm" id="auto" style="margin-top:8px">Autofill from pasted text</button></div>';
+function openForm(kind,id){
+const it=id?S[kind].find(x=>x.id===id):{...DEF[kind]()};M={kind,id};
+const f=F[kind].map(([k,l,t,o])=>{let v=it[k]??"",op=o==="prop"?S.props.map(p=>p.addr):o;
+if(t==="select"&&v&&!op.includes(v))op=[v,...op];
+const inp=t==="select"?`<select name="${k}"><option value=""></option>${op.map(x=>`<option ${x===v?"selected":""}>${E(x)}</option>`).join("")}</select>`:t==="check"?`<input type="checkbox" name="${k}" ${v?"checked":""}>`:t==="area"?`<textarea name="${k}" rows="3">${E(v)}</textarea>`:`<input name="${k}" type="${t}" value="${E(v)}" ${t==="number"?'step="any"':""}>`;
+return `<label class="${t==="area"?"w":t==="check"?"ck":""}"><span>${l}</span>${inp}</label>`}).join("");
+$("#modal").innerHTML=`<form class="dlg" id="frm"><h2>${id?"Edit":"Add"} ${T[kind]}</h2>${kind==="props"?AUTO:""}<div class="fg">${f}</div><div class="acts">${id?'<button type="button" class="btn danger" id="del">Delete</button>':""}<span class="sp"></span><button type="button" class="btn ghost" id="cancel">Cancel</button><button class="btn">Save</button></div></form>`;
+$("#modal").classList.add("on");$("#frm [name]").focus()}
+const closeForm=()=>{$("#modal").classList.remove("on");M=null};
+async function autofill(b){const txt=$("#paste").value.trim();if(!txt){toast("Paste the listing text first");return}
+const url=$("#frm [name=url]").value.trim();b.disabled=true;b.textContent="Reading listing...";
+try{const sm=await window.claude?.use("sample");if(!sm){toast("Autofill is not available here. Open the page from its claude.ai link while signed in.");return}
+const r=await sm.json(`Extract rental listing details from the text below. Reply with JSON only, using these keys: addr (street address), area (neighbourhood), type (one of Apartment, House, Studio, Loft, Office), beds (number), rent (monthly rent as a number, no currency symbol), size (square metres as a number), floor (text), furn (Yes, No or Partly), notes (short building details such as elevator, parking, heating, pets, year built). Use null for anything the text does not state. Do not guess.\n\nLink: ${url}\n\nText:\n${txt.slice(0,6000)}`);
+let n=0;for(const k in r){const el=$("#frm [name="+k+"]");if(el&&r[k]!=null&&r[k]!==""){el.value=String(r[k]);n++}}
+toast(n?"Filled "+n+" fields. Check them, then save.":"Nothing found in that text")}
+catch(e){toast(e&&e.code==="not_granted"?"Autofill permission was declined":"Could not read the listing. Try again.")}
+finally{b.disabled=false;b.textContent="Autofill from pasted text"}}
+async function askAI(p){const sm=await window.claude?.use('sample');if(sm){const o=await sm(p);return {text:o.text}}
+let code='';try{code=localStorage.getItem('ac')||''}catch(e){}
+for(let t=0;t<2;t++){const r=await fetch('/api/autofill',{method:'POST',headers:{'content-type':'application/json','x-code':code},body:JSON.stringify({prompt:p})});
+if(r.status===401){code=window.prompt('Enter the autofill access code')||'';if(!code)throw new Error('Access code needed');try{localStorage.setItem('ac',code)}catch(e){}continue}
+if(r.status===404)throw new Error('Autofill is not set up on this site yet');
+if(r.status===500)throw new Error('Autofill server is missing its API key');
+if(!r.ok)throw new Error('Autofill server error '+r.status);
+return await r.json()}
+throw new Error('Wrong access code')}
+async function autofill2(b){const txt=$('#paste').value.trim();if(!txt){toast('Paste the listing text first');return}const url=$('#frm [name=url]').value.trim(),code={'$':'USD','\u20be':'GEL','\u20ac':'EUR'}[S.settings.cur]||'USD';b.disabled=true;b.textContent='Reading listing...';try{const out=await askAI(`The text below was copied from a Georgian real-estate listing page (myhome.ge or ss.ge). It is most likely in Georgian, possibly Russian or English, and may contain menus, similar listings and other noise. Extract only the main listing described.
+Georgian hints: ქირა / ქირავდება = rent, ფართი = area in m², სართული = floor, ოთახი = rooms, საძიკებელი = bedrooms, მისამართი = address, უბანი = neighbourhood, ბინა = apartment, სახლი = house, ოფისი = office, ავეჯი = furniture, პარკინგი = parking, ლიფტი = elevator, გათბობა = heating. Prices may be in $ (USD) or ₾ (GEL).
+Reply with ONLY a JSON object with these keys: addr (street address), area (neighbourhood), type (one of Apartment, House, Studio, Loft, Office), beds (number of bedrooms; if only rooms are given use rooms minus 1; studio is 0), rent (monthly rent as a number), currency (USD, GEL or EUR), size (square metres as a number), floor (text), furn (Yes, No or Partly), notes (short English summary of building details such as elevator, parking, heating, pets, year built, renovation). Write addr, area and notes in English, transliterating Georgian street and neighbourhood names. Use null for anything the text does not state. Do not guess.\n\nLink: ${url}\n\nText:\n${txt.slice(0,8000)}`);
+let r;try{const t=out.text||'';r=JSON.parse(t.slice(t.indexOf('{'),t.lastIndexOf('}')+1))}catch(e){toast('Could not understand the result. Try pasting just the listing description.');return}
+let n=0;const set=(k,v)=>{const el=$('#frm [name='+k+']');if(el&&v!=null&&v!==''){el.value=String(v);n++}};['addr','area','type','beds','size','floor','furn'].forEach(k=>set(k,r[k]));let note=r.notes||'',cm=false;
+if(r.rent!=null){if(!r.currency||r.currency===code)set('rent',r.rent);else{cm=true;note=(note?note+'. ':'')+'Listed price: '+r.rent+' '+r.currency}}
+if(note){const el=$('#frm [name=notes]');el.value=(el.value?el.value+'\n':'')+note;n++}
+toast(n?'Filled '+n+' fields. Check them, then save.'+(cm?' The price is in '+r.currency+', so it was added to the notes. Enter the rent in your own currency.':''):'Nothing found in that text')}catch(e){toast(e&&e.code==='not_granted'?'Autofill permission was declined':'Autofill failed: '+((e&&(e.message||e.code))||'unknown error'))}finally{b.disabled=false;b.textContent='Autofill from pasted text'}}
+const arm=(b,label,fn)=>{if(b._a){fn();return}b._a=b.textContent;b.textContent=label;setTimeout(()=>{if(b.isConnected&&b._a){b.textContent=b._a;b._a=0}},3000)};
+
+document.addEventListener("submit",e=>{e.preventDefault();if(!M)return;const f=new FormData(e.target),o={};
+F[M.kind].forEach(([k,l,t])=>{const v=f.get(k);o[k]=t==="check"?f.has(k):t==="number"?(v===""||v==null?"":+v):(v||"").trim()});
+const first=F[M.kind][0][0];if(!o[first]&&M.kind!=="views"){toast("Fill in the "+F[M.kind][0][1].toLowerCase()+" first");return}
+let it;if(M.id){it=S[M.kind].find(x=>x.id===M.id);Object.assign(it,o)}else{it={id:uid(),...o};S[M.kind].push(it)}
+if(M.kind==="leads")setStage(it,it.stage||"New");
+save();closeForm();render();toast("Saved")});
+document.addEventListener("click",e=>{
+if(e.target.id==="modal"){closeForm();return}
+const b=e.target.closest("button");if(!b)return;const d=b.dataset;
+if(d.v){view=d.v;render();window.scrollTo(0,0)}
+else if(d.cst){cst=d.cst;render()}
+else if(d.add)openForm(d.add);
+else if(d.edit){const[k,id]=d.edit.split(":");openForm(k,id)}
+else if(d.mv){const[id,st]=d.mv.split(":");setStage(S.leads.find(x=>x.id===id),st);save();render();if(st==="Rented")toast("Rented. Fee recorded.");else if(st==="Rejected")toast("Marked as rejected")}
+else if(d.done){const[k,id]=d.done.split(":");S[k].find(x=>x.id===id).done=true;save();render();toast("Marked done")}
+else if(b.id==="auto")autofill2(b);
+else if(b.id==="cancel")closeForm();
+else if(b.id==="del")arm(b,"Click again to delete",()=>{S[M.kind]=S[M.kind].filter(x=>x.id!==M.id);save();closeForm();render();toast("Deleted")});
+else if(b.id==="exp"){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(S,null,1)],{type:"application/json"}));a.download="agency-backup-"+today+".json";document.body.appendChild(a);a.click();a.remove();toast("Backup downloaded")}
+else if(b.id==="imp")$("#impf").click();
+else if(b.id==="clear")arm(b,"Click again to delete everything",()=>{S={settings:S.settings,props:[],leads:[],views:[]};save();render();toast("All data deleted")});
+else if(b.id==="sample")arm(b,"Click again to replace your data",()=>{S=norm(seed());save();render();toast("Sample data loaded")});
+else if(b.id==="theme"){const r=document.documentElement,dk=r.dataset.theme?r.dataset.theme==="dark":matchMedia("(prefers-color-scheme:dark)").matches;r.dataset.theme=dk?"light":"dark"}
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&M)closeForm()});
+matchMedia("(max-width:820px)").addEventListener("change",()=>{if(!M)render()});
+document.addEventListener("input",e=>{if(e.target.id==="q"){q=e.target.value;const p=e.target.selectionStart;render();const i=$("#q");i.focus();i.setSelectionRange(p,p)}});
+document.addEventListener("change",e=>{const t=e.target;if(t.id==="impf"){const f=t.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const d=JSON.parse(r.result);if(!Array.isArray(d.props)||!Array.isArray(d.leads))throw 0;S=norm(d);save();render();toast("Backup restored")}catch(x){toast("That file is not a valid backup")}};r.readAsText(f);return}if(t.id==="fs"){fst=t.value;render()}else if(t.dataset.set){S.settings[t.dataset.set]=t.type==="number"?(+t.value||0):t.value;save();render();toast("Saved")}});
+render();
+(async()=>{try{const db=await window.claude?.use("db");if(!db)return;DB=db;const s=await db.doc("crm/state").get();
+if(s.exists){const j=s.data().json;if(j&&j!==JSON.stringify(S)){S=norm(JSON.parse(j));if(!M)render()}}else save()}catch(e){}})();
+</script>
+</body>
+</html>
